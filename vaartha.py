@@ -4,6 +4,9 @@ Main entry point for the VaarthaAI application.
 Provides a unified interface for running all application commands.
 """
 
+from utils.sqlite_fix import apply_sqlite_fix
+apply_sqlite_fix()
+
 import os
 import sys
 import logging

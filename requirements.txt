@@ -12,3 +12,4 @@ python-dotenv
 python-docx
 PyPDF2
 sentence-transformers
+pysqlite3-binary>=0.4.7
