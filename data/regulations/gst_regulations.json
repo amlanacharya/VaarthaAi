@@ -1,0 +1,26 @@
+{
+  "title": "Goods and Services Tax (GST) Regulations",
+  "regulation_type": "gst",
+  "sections": [
+    {
+      "section": "Section 1",
+      "title": "Introduction to GST",
+      "content": "The Goods and Services Tax (GST) is an indirect tax levied on the supply of goods and services in India. It replaced multiple taxes levied by the central and state governments. GST is a comprehensive, multi-stage, destination-based tax that is levied on every value addition."
+    },
+    {
+      "section": "Section 2",
+      "title": "GST Registration",
+      "content": "Every business whose turnover exceeds Rs. 20 lakhs (Rs. 10 lakhs for North Eastern and hill states) must register for GST. Registration can be done online through the GST portal. Documents required include PAN, business registration documents, and bank account details."
+    },
+    {
+      "section": "Section 3",
+      "title": "GST Returns Filing",
+      "content": "Regular taxpayers must file monthly or quarterly returns depending on their turnover. The main returns are GSTR-1 (outward supplies), GSTR-3B (summary return), and GSTR-9 (annual return). Returns must be filed even if there is no business activity."
+    },
+    {
+      "section": "Section 4",
+      "title": "Input Tax Credit",
+      "content": "Input Tax Credit (ITC) is the credit a business can claim for GST paid on purchase of goods or services used for business purposes. To claim ITC, the supplier must have filed their returns and the recipient must have the tax invoice."
+    }
+  ]
+}

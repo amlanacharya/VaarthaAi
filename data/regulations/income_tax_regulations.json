@@ -1,0 +1,26 @@
+{
+  "title": "Income Tax Regulations",
+  "regulation_type": "income_tax",
+  "sections": [
+    {
+      "section": "Section 1",
+      "title": "Introduction to Income Tax",
+      "content": "Income Tax is a direct tax levied on the income earned by individuals, businesses, and other entities. In India, income tax is governed by the Income Tax Act, 1961. The tax is administered by the Central Board of Direct Taxes (CBDT)."
+    },
+    {
+      "section": "Section 2",
+      "title": "Tax Slabs and Rates",
+      "content": "Income tax in India is levied at progressive rates. For individuals, the tax slabs for FY 2023-24 under the new tax regime are: No tax up to Rs. 3 lakhs, 5% for Rs. 3-6 lakhs, 10% for Rs. 6-9 lakhs, 15% for Rs. 9-12 lakhs, 20% for Rs. 12-15 lakhs, and 30% for income above Rs. 15 lakhs."
+    },
+    {
+      "section": "Section 3",
+      "title": "Tax Deductions",
+      "content": "The Income Tax Act provides for various deductions under Chapter VI-A (Sections 80C to 80U). These include deductions for investments in PPF, ELSS, life insurance premiums (80C), health insurance premiums (80D), interest on education loans (80E), and interest on home loans (24B)."
+    },
+    {
+      "section": "Section 4",
+      "title": "TDS Provisions",
+      "content": "Tax Deducted at Source (TDS) is a system where the person making specified payments deducts tax at source and deposits it with the government. Common TDS provisions include TDS on salary (Section 192), interest (Section 194A), professional fees (Section 194J), and rent (Section 194I)."
+    }
+  ]
+}

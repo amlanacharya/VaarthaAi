@@ -1,0 +1,14 @@
+streamlit
+pandas
+numpy
+groq
+langchain
+langchain-groq
+langchain-community
+langchain-huggingface
+langchain-chroma
+chromadb
+python-dotenv
+python-docx
+PyPDF2
+sentence-transformers
