@@ -16,6 +16,7 @@ from models.smart_classifier import SmartTransactionClassifier
 from models.rag import FinancialRAG
 from utils.parser import BankStatementParser, generate_sample_transactions
 from utils.database import Database
+from models.unified_query import UnifiedQueryHandler
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -206,13 +207,15 @@ class InsightController:
     Manages RAG queries and financial analysis.
     """
     
-    def __init__(self, db: Optional[Database] = None, rag: Optional[FinancialRAG] = None):
+    def __init__(self, db: Optional[Database] = None, rag: Optional[FinancialRAG] = None, 
+                 unified_query_handler: Optional[UnifiedQueryHandler] = None):
         """
         Initialize the controller with dependencies.
         
         Args:
             db: Database instance for storage (injected for testability)
             rag: RAG instance for financial queries
+            unified_query_handler: Unified query handler for both transaction and regulation queries
         """
         self.db = db or Database()
         self.rag = rag or FinancialRAG()
@@ -220,6 +223,9 @@ class InsightController:
         # Initialize RAG knowledge base if needed
         if config.ENABLE_RAG:
             self.initialize_rag()
+            
+        # Initialize unified query handler if provided, otherwise create new one
+        self.unified_query = unified_query_handler or UnifiedQueryHandler(db=self.db)
     
     def initialize_rag(self):
         """Initialize the RAG knowledge base."""
@@ -229,9 +235,9 @@ class InsightController:
         except Exception as e:
             logger.error(f"Error initializing RAG knowledge base: {e}")
     
-    def query_financial_regulations(self, query: str, regulation_type: Optional[str] = None) -> Dict[str, Any]:
+    def query_financial_knowledge(self, query: str, regulation_type: Optional[str] = None) -> Dict[str, Any]:
         """
-        Query financial regulations using RAG.
+        Query financial knowledge base and transaction data using natural language.
         
         Args:
             query: The query string
@@ -244,10 +250,22 @@ class InsightController:
             RAGError: If RAG query fails
         """
         try:
-            return self.rag.query(query, regulation_type)
+            # Use the unified query handler to route the query appropriately
+            result = self.unified_query.query(query, regulation_type)
+            
+            # Check if this is transaction data or a regulation response
+            if result.get("is_transaction_data", False):
+                # For transaction data, we may want to format differently
+                if "data" in result and result["data"]:
+                    # Create visualization or format the data for display
+                    pass
+                    
+            return result
         except Exception as e:
-            logger.error(f"Error querying financial regulations: {e}")
+            logger.error(f"Error querying financial knowledge: {e}")
             raise
+    
+
     
     def analyze_expense_categories(self) -> Dict[str, Any]:
         """

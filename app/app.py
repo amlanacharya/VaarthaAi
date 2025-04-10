@@ -14,8 +14,11 @@ load_dotenv()
 from models.transaction import Transaction, TransactionType, TransactionCategory
 from models.smart_classifier import SmartTransactionClassifier
 from models.rag import FinancialRAG
+from models.unified_query import UnifiedQueryHandler
 from utils.parser import BankStatementParser, generate_sample_transactions
 from utils.database import Database
+from controllers import InsightController, TransactionController, ComplianceController
+from utils.data_query import render_data_query_interface
 
 # Configure page
 st.set_page_config(
@@ -34,17 +37,15 @@ if 'db_initialized' not in st.session_state:
 if 'rag_initialized' not in st.session_state:
     st.session_state.rag_initialized = False
 
-# Initialize database
+# Define cached resource functions
 @st.cache_resource
 def get_database():
     return Database()
 
-# Initialize classifier
 @st.cache_resource
 def get_classifier():
     return SmartTransactionClassifier(industry="coworking")
 
-# Initialize RAG system
 @st.cache_resource
 def get_rag():
     rag = FinancialRAG()
@@ -53,24 +54,41 @@ def get_rag():
         st.session_state.rag_initialized = True
     return rag
 
-# Header
-st.title("VaarthaAI - Financial Assistant")
-st.subheader("AI-powered financial assistant for Indian CAs and businesses")
-
-# Sidebar
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Dashboard", "Transaction Management", "Financial Insights", "Compliance Assistant"])
+@st.cache_resource
+def get_unified_query_handler():
+    db = get_database()
+    return UnifiedQueryHandler(db=db)
 
 # Initialize components
 db = get_database()
 classifier = get_classifier()
 rag = get_rag()
+unified_query = get_unified_query_handler()
+
+# Initialize controllers
+transaction_controller = TransactionController(db=db, classifier=classifier)
+insight_controller = InsightController(db=db, rag=rag, unified_query_handler=unified_query)
+compliance_controller = ComplianceController(db=db)
 
 # Ensure database is initialized
 if not st.session_state.db_initialized:
     # Load transactions from database
     st.session_state.transactions = db.get_transactions(limit=100)
     st.session_state.db_initialized = True
+
+# Header
+st.title("VaarthaAI - Financial Assistant")
+st.subheader("AI-powered financial assistant for Indian CAs and businesses")
+
+# Sidebar
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", [
+    "Dashboard", 
+    "Transaction Management", 
+    "Financial Insights", 
+    "Data Query",  # Added Data Query page
+    "Compliance Assistant"
+])
 
 # Dashboard Page
 if page == "Dashboard":
@@ -337,17 +355,46 @@ elif page == "Financial Insights":
 
         if question:
             with st.spinner("Generating answer..."):
-                # Use RAG to answer the question
-                response = rag.query(question)
+                # Use the unified query system
+                response = insight_controller.query_financial_knowledge(question)
 
                 st.write("### Answer")
                 st.write(response["response"])
 
-                # Display sources
-                if response["sources"]:
+                # Check if this is transaction data or regulation data
+                if response.get("is_transaction_data", False) and "data" in response and response["data"]:
+                    # Display transaction data results
+                    st.write("### Transaction Data")
+                    
+                    # Create DataFrame from the result data
+                    df = pd.DataFrame(response["data"])
+                    
+                    # Format date if present
+                    if 'date' in df.columns:
+                        df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+
+                    # Format amount with currency symbol
+                    if 'amount' in df.columns:
+                        df['amount'] = df['amount'].apply(lambda x: f"₹{x:,.2f}")
+                    
+                    # Display as table
+                    st.dataframe(df)
+                    
+                    # Display SQL query if available
+                    if "sql" in response:
+                        with st.expander("SQL Query"):
+                            st.code(response["sql"], language="sql")
+                
+                # Display regulation sources if present
+                elif "sources" in response and response["sources"]:
                     st.write("### Sources")
                     for i, source in enumerate(response["sources"]):
                         st.write(f"**Source {i+1}:** {source['title']} - {source['section_title']}")
+
+# Data Query Page
+elif page == "Data Query":
+    # Use the dedicated data query component
+    render_data_query_interface(insight_controller)
 
 # Compliance Assistant Page
 elif page == "Compliance Assistant":
