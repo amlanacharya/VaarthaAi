@@ -68,7 +68,7 @@ VaarthaAI/
 │   ├── patch.py               # Utility script for applying patches
 │   ├── reset.py               # Utility script for resetting configurations or data
 │   └── sqlite_fix.py          # Utility script for fixing SQLite-related issues
-├── vaartha.py                # Main script for the Vaartha project (possibly entry point)
+├── vaartha.py                # Main script for the Vaartha project 
 └── vectorizer.pkl            # Pickled vectorizer model (likely used for text processing)
 
 
