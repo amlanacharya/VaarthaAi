@@ -13,33 +13,65 @@ VaarthaAI is an AI-powered financial assistant that helps Indian Chartered Accou
 
 ```
 VaarthaAI/
-├── app/                          # Web application
-│   ├── app.py                    # Streamlit application
-│   └── run.py                    # Application runner
-├── config.py                     # Centralized configuration
-├── controllers.py                # Business logic controllers
-├── cli.py                        # Command line interface
-├── exceptions.py                 # Custom exceptions
-├── models/                       # Core models
-│   ├── smart_classifier.py       # Multi-layer transaction classifier
-│   ├── rag.py                    # Retrieval Augmented Generation
-│   └── transaction.py            # Data models and enums
-├── utils/                        # Utility modules
-│   ├── database.py               # Thread-safe database access
-│   ├── parser.py                 # Bank statement parser
-│   ├── reset.py                  # Data reset utilities
-│   └── patch.py                  # Dependency patching utilities
-├── test/                         # Test framework
-│   ├── conftest.py               # Test fixtures
-│   ├── test_classifier.py        # Classifier tests
-│   └── test_controllers.py       # Controller tests
-├── data/                         # Data storage
-│   ├── chroma_db/                # Vector database
-│   ├── regulations/              # Financial regulation data
-│   └── sample_data/              # Sample transaction data
-├── .env                          # Environment variables
-├── vaartha.py                    # Main entry point
-└── requirements.txt              # Dependencies
+├── .gitignore               # Git ignore file, used to exclude files/folders from version control
+├── README.md                # Project documentation file (overview and setup instructions)
+├── RUNNING.md               # Instructions on how to run the project
+├── Vaartha.docx             # A document file (possibly related to the project or its purpose)
+├── app                       # Main application folder
+│   ├── __init__.py          # Marks the directory as a Python package
+│   ├── app.py               # Main application logic file
+│   └── run.py               # Entry point to run the app
+├── batch                     # Folder containing batch script files for running or testing
+│   ├── patch_streamlit.bat  # Batch script for patching or updating Streamlit
+│   ├── reset_app.bat        # Batch script for resetting the app
+│   ├── run_fixed_app.bat    # Batch script for running the fixed version of the app
+│   ├── run_no_watcher.bat   # Batch script to run the app without a watcher
+│   ├── run_smart_app.bat    # Batch script for running the smart app
+│   ├── run_smart_classifier.bat # Batch script for running the smart classifier
+│   ├── run_smart_classifier_no_groq.bat # Batch script for running classifier without Groq
+│   └── test_simple.bat      # Batch script for running simple tests
+├── check.py                 # Python script for performing checks or validations
+├── cli.py                   # Command-line interface script for interacting with the app
+├── config.py                # Configuration file (settings, constants, etc.)
+├── controllers.py           # Python file for handling controller logic
+├── data                     # Folder for data files
+│   ├── chroma_db            # Folder containing Chroma DB-related files
+│   │ 
+│   ├── regulations           # Folder containing regulation-related JSON files
+│   ├── sample_data           # Folder containing sample data files (CSV)
+│   |
+│   ├── transaction_query_vectorstore # Folder containing transaction query data
+│   │  
+│   └── vaartha.db             # Database file (possibly related to Vaartha project)
+├── exceptions.py             # Custom exception classes for the project
+├── main.py                   # Main script to run the project
+├── models                    # Folder for machine learning or business logic models
+│   ├── __init__.py            # Marks the directory as a Python package
+│   ├── classifier.py          # Machine learning classifier model
+│   ├── rag.py                 # Possibly a model related to RAG (Retrieval-Augmented Generation)
+│   ├── smart_classifier.py    # Smart classifier model
+│   ├── transaction.py         # Model for handling transaction-related logic
+│   └── unified_query.py       # Model for managing unified queries
+├── patch_streamlit.py        # Python script for patching or updating Streamlit
+├── plan.md                   # Project planning document (roadmap, goals, etc.)
+├── requirements.txt          # List of dependencies (used by pip for installations)
+├── run_streamlit.py          # Script to run the Streamlit app
+├── sql_loader.py             # Python script for loading SQL data
+├── test                      # Folder for test scripts
+├── transaction_model.pkl     # Pickled machine learning model for transactions
+├── transaction_nl_query.py   # Script for handling transaction-related natural language queries
+├── utils                     # Folder for utility scripts
+│   ├── __init__.py            # Marks the directory as a Python package
+│   ├── data_query.py          # Utility script for querying data
+│   ├── database.py            # Utility script for database-related logic
+│   ├── parser.py              # Parser utility for processing data
+│   ├── patch.py               # Utility script for applying patches
+│   ├── reset.py               # Utility script for resetting configurations or data
+│   └── sqlite_fix.py          # Utility script for fixing SQLite-related issues
+├── vaartha.py                # Main script for the Vaartha project (possibly entry point)
+└── vectorizer.pkl            # Pickled vectorizer model (likely used for text processing)
+
+
 ```
 
 ## Setup and Installation
