@@ -1,121 +1,203 @@
 # VaarthaAI - Financial Assistant for Indian CAs and Businesses
 
-VaarthaAI is an AI-powered financial assistant that helps Indian Chartered Accountants (CAs) and businesses streamline financial workflows, improve compliance, and boost productivity. This prototype uses open-source technologies including GROQ API with Llama models and local embeddings.
+VaarthaAI is an AI-powered financial assistant that helps Indian Chartered Accountants (CAs) and businesses streamline financial workflows, improve compliance, and boost productivity. This application uses modern open-source technologies including GROQ API with Llama models and local embeddings for efficient transaction classification and financial insights.
 
 ## Features
 
-- **Smart Transaction Classification**: Efficiently categorizes bank transactions using a multi-layered approach with minimal API calls
-- **Financial Insights**: Provides actionable insights based on transaction patterns
-- **Compliance Assistant**: Helps with GST reconciliation and finding tax deductions
-- **Natural Language Interface**: Ask questions about financial data and regulations
+- **Smart Transaction Classification**: Multi-layered classification system that minimizes API calls
+- **Financial Insights**: AI-driven insights based on transaction patterns
+- **Compliance Assistant**: GST reconciliation and tax deduction identification
+- **Natural Language Interface**: Ask questions about financial data and Indian regulations
 
 ## Project Structure
 
 ```
 VaarthaAI/
-├── app/
-│   └── app.py                    # Streamlit application
-├── data/
-│   ├── chroma_db/                # Vector database for RAG
-│   ├── regulations/              # Financial regulations data
+├── app/                          # Web application
+│   ├── app.py                    # Streamlit application
+│   └── run.py                    # Application runner
+├── config.py                     # Centralized configuration
+├── controllers.py                # Business logic controllers
+├── cli.py                        # Command line interface
+├── exceptions.py                 # Custom exceptions
+├── models/                       # Core models
+│   ├── smart_classifier.py       # Multi-layer transaction classifier
+│   ├── rag.py                    # Retrieval Augmented Generation
+│   └── transaction.py            # Data models and enums
+├── utils/                        # Utility modules
+│   ├── database.py               # Thread-safe database access
+│   ├── parser.py                 # Bank statement parser
+│   ├── reset.py                  # Data reset utilities
+│   └── patch.py                  # Dependency patching utilities
+├── test/                         # Test framework
+│   ├── conftest.py               # Test fixtures
+│   ├── test_classifier.py        # Classifier tests
+│   └── test_controllers.py       # Controller tests
+├── data/                         # Data storage
+│   ├── chroma_db/                # Vector database
+│   ├── regulations/              # Financial regulation data
 │   └── sample_data/              # Sample transaction data
-├── models/
-│   ├── classifier.py             # Basic transaction classifier
-│   ├── smart_classifier.py       # Advanced multi-layered classifier
-│   ├── rag.py                    # Retrieval Augmented Generation system
-│   └── transaction.py            # Transaction data models
-├── utils/
-│   ├── database.py               # Thread-safe database utilities
-│   └── parser.py                 # Bank statement parser
-├── scripts/
-│   ├── reset_app.py              # Reset application data
-│   └── patch_streamlit.py        # Fix PyTorch/Streamlit conflicts
 ├── .env                          # Environment variables
-├── run_smart_app.py              # Run app with smart classifier
-├── run_smart_classifier.py       # Test the smart classifier
-└── README.md                     # Project documentation
+├── vaartha.py                    # Main entry point
+└── requirements.txt              # Dependencies
 ```
 
 ## Setup and Installation
 
 1. Clone the repository:
-   ```
+   ```bash
    git clone https://github.com/yourusername/VaarthaAI.git
    cd VaarthaAI
    ```
 
 2. Create a virtual environment:
-   ```
+   ```bash
    python -m venv .venv
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
 3. Install dependencies:
-   ```
+   ```bash
    pip install -r requirements.txt
    ```
 
 4. Set up environment variables:
-   - Create a `.env` file in the project root
-   - Add your GROQ API key: `GROQ_API_KEY=your_groq_api_key_here`
+   - Create a `.env` file in the project root with the following:
+   ```
+   GROQ_API_KEY=your_groq_api_key_here
+   VAARTHA_ENV=development
+   ```
 
 5. Run the application:
+   ```bash
+   python vaartha.py run
    ```
-   python run_smart_app.py
-   ```
 
-   Or use one of the provided batch files:
-   - `run_fixed_app.bat` - Run with thread-safe database
-   - `run_smart_classifier.bat` - Test the smart classifier
-   - `run_smart_classifier_no_groq.bat` - Test without GROQ API
+## Usage Examples
 
-## Usage
+### Run the Web Application
 
-1. **Upload Bank Statements**: Upload bank statements in CSV, Excel, or PDF format
-2. **View and Edit Transactions**: Review and modify transaction categories
-3. **Get Financial Insights**: Analyze expenses by category and ask questions
-4. **Compliance Assistance**: Find potential tax deductions and reconcile GST
+```bash
+# Standard run
+python vaartha.py run
+
+# Run with disabled file watcher (fixes PyTorch conflict)
+python vaartha.py run --no-watcher
+
+# Run in headless mode
+python vaartha.py run --headless
+```
+
+### Test the Transaction Classifier
+
+```bash
+# Test with GROQ API if available
+python vaartha.py test
+
+# Test without using GROQ API
+python vaartha.py test --no-groq
+
+# Test with a specific file
+python vaartha.py test --file data/sample_data/custom_statement.csv --bank hdfc
+```
+
+### Reset Application Data
+
+```bash
+# Reset all data (with confirmation prompt)
+python vaartha.py reset
+
+# Force reset without confirmation
+python vaartha.py reset --force
+
+# Reset only the database
+python vaartha.py reset --database
+
+# Reset only the vector database
+python vaartha.py reset --vector-db
+```
+
+### Generate Sample Data
+
+```bash
+# Generate default sample data
+python vaartha.py sample
+
+# Generate custom number of transactions
+python vaartha.py sample --count 50
+
+# Generate for a specific industry
+python vaartha.py sample --industry retail
+```
+
+## Smart Classification System
+
+The application uses a multi-layered approach to transaction classification:
+
+1. **Cache-Based Classification**: Remembers previously classified transactions
+2. **Rule-Based Classification**: Uses regex patterns and keywords for common transactions
+3. **Machine Learning Classification**: Uses a local ML model that improves over time
+4. **BERT-Based Classification**: Optional deep learning for complex cases
+5. **GROQ API Classification**: Only used as a last resort for difficult transactions
+
+This approach minimizes API calls while maintaining high accuracy.
 
 ## Development
 
-### Smart Classification System
+### Running Tests
 
-The application uses a multi-layered classification approach to minimize API calls:
+```bash
+# Run all tests
+pytest
 
-1. **Cache-based Classification**: Remembers previously classified transactions
-2. **Rule-based Classification**: Uses regex patterns and keywords for common transactions
-3. **Machine Learning Classification**: Uses a local ML model that improves over time
-4. **BERT-based Classification**: Optional deep learning for complex cases
-5. **GROQ API Classification**: Only used as a last resort for difficult transactions
+# Run specific test file
+pytest test/test_classifier.py
 
-### Future Enhancements
+# Run tests with verbose output
+pytest -v
 
-Planned improvements include:
+# Run tests that don't require API access
+pytest -k "not api"
+```
 
-- Integration with accounting software
-- Advanced GST reconciliation
-- Multi-user support for CA firms
-- Mobile application
+### Project Organization
 
-## License
+The project follows these design principles:
 
-[MIT License](LICENSE)
+- **Dependency Injection**: Controllers accept dependencies for easier testing
+- **Separation of Concerns**: Business logic in controllers, UI in app module
+- **MVC Pattern**: Model-View-Controller architecture
+- **Error Handling**: Centralized exceptions and standardized error responses
+- **Configuration Management**: Centralized configuration with environment support
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **SQLite Thread Error**: If you encounter `SQLite objects created in a thread can only be used in that same thread`, use the thread-safe version by running `run_fixed_app.bat`.
+1. **SQLite Thread Error**: If you encounter thread-related SQLite errors, the improved database module with context managers should resolve this.
 
-2. **PyTorch/Streamlit Conflict**: If you see `RuntimeError: Tried to instantiate class '__path__._path'`, run the patch script with `patch_streamlit.bat` or use `run_no_watcher.py`.
+2. **PyTorch/Streamlit Conflict**: If you encounter PyTorch-related errors with Streamlit:
+   ```bash
+   # Apply the Streamlit patch
+   python vaartha.py patch --streamlit
+   
+   # Or run with file watcher disabled
+   python vaartha.py run --no-watcher
+   ```
 
-3. **ChromaDB Errors**: If the vector database is corrupted, reset it with `reset_app.bat`.
+3. **ChromaDB Errors**: If the vector database is corrupted:
+   ```bash
+   python vaartha.py reset --vector-db
+   ```
+
+## License
+
+[MIT License](LICENSE)
 
 ## Acknowledgements
 
-- GROQ for Llama model API access
+- GROQ for providing Llama model API access
 - Hugging Face for sentence-transformers and BERT models
-- LangChain for RAG implementation
+- LangChain for the RAG implementation
 - Streamlit for the web interface
-- FuzzyWuzzy for string matching
-- scikit-learn for machine learning components
+- Other open source contributors
