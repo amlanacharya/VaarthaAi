@@ -16,12 +16,12 @@ VaarthaAI/
 ├── .gitignore               # Git ignore file, used to exclude files/folders from version control
 ├── README.md                # Project documentation file (overview and setup instructions)
 ├── RUNNING.md               # Instructions on how to run the project
-├── Vaartha.docx             # A document file (possibly related to the project or its purpose)
-├── app                       # Main application folder
+├── Vaartha.docx             # doc version of plan
+├── app                      # Main application folder
 │   ├── __init__.py          # Marks the directory as a Python package
 │   ├── app.py               # Main application logic file
 │   └── run.py               # Entry point to run the app
-├── batch                     # Folder containing batch script files for running or testing
+├── batch                    # Folder containing batch script files for running or testing
 │   ├── patch_streamlit.bat  # Batch script for patching or updating Streamlit
 │   ├── reset_app.bat        # Batch script for resetting the app
 │   ├── run_fixed_app.bat    # Batch script for running the fixed version of the app
@@ -42,17 +42,17 @@ VaarthaAI/
 │   |
 │   ├── transaction_query_vectorstore # Folder containing transaction query data
 │   │  
-│   └── vaartha.db             # Database file (possibly related to Vaartha project)
+│   └── vaartha.db            # Database file 
 ├── exceptions.py             # Custom exception classes for the project
 ├── main.py                   # Main script to run the project
-├── models                    # Folder for machine learning or business logic models
+├── models                    # Folder business logic models
 │   ├── __init__.py            # Marks the directory as a Python package
 │   ├── classifier.py          # Machine learning classifier model
-│   ├── rag.py                 # Possibly a model related to RAG (Retrieval-Augmented Generation)
+│   ├── rag.py                 # RAG (Retrieval-Augmented Generation)
 │   ├── smart_classifier.py    # Smart classifier model
 │   ├── transaction.py         # Model for handling transaction-related logic
 │   └── unified_query.py       # Model for managing unified queries
-├── patch_streamlit.py        # Python script for patching or updating Streamlit
+├── patch_streamlit.py        # Python script for patching Streamlit
 ├── plan.md                   # Project planning document (roadmap, goals, etc.)
 ├── requirements.txt          # List of dependencies (used by pip for installations)
 ├── run_streamlit.py          # Script to run the Streamlit app
